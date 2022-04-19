@@ -1,8 +1,9 @@
 "-----------------------------------------------------------------------------
 " Plugins
 " -----------------------------------------------------------------------------
-"
-call plug#begin('~/.vim/plugged')
+
+call plug#begin('$HOME/vimfiles/plugged')
+"call plug#begin('~/.vim/plugged')
 
 " Enhance viewing the list of previous and current files
 Plug 'gpanders/vim-oldfiles'
