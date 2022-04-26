@@ -987,10 +987,10 @@ cd $HOME\Documents\repos
 
 elseif $COMPUTERNAME == "CEPSNYLPENG1491"
 
-cd C:\Users\mark.beresford\Documents\myfiles
+cd C:\Users\mark.beresford\Documents
 
-set undodir=C:\Users\mark.beresford\Documents\myfiles\vim-config\undo     " Saves undo steps to a file so you can redo even after exiting Vim
-set spellfile=C:\Users\mark.beresford\Documents\myfiles\vim-config\en.utf-8.add
+set undodir=C:\Users\mark.beresford\Documents\vim-config\undo     " Saves undo steps to a file so you can redo even after exiting Vim
+set spellfile=C:\Users\mark.beresford\Documents\vim-config\en.utf-8.add
 
 winpos 1200 400
 winsize 100 30
