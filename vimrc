@@ -203,7 +203,7 @@ set splitbelow
 set splitright
 set tabstop=2                  " width that a <TAB> character displays as
 set termguicolors
-set textwidth=0                " best to make this the same as the tabstop
+set textwidth=2                " best to make this the same as the tabstop
 set timeoutlen=150             " If less than 200, leader mappings don't work. Timeout after typing a mapping code before aborting it and carrying out the behaviour of the keys typed so far
 set ttimeoutlen=80             " Time Vim will wait after each keycode keystroke such as <esc> before aborting it and carrying out the behaviour of the keys typed so far
 set ttyfast
@@ -797,21 +797,6 @@ augroup FernGroup
 augroup END
 
 " -----------------------------------------------------------------------------
-" romainl/vim-qf settings
-" -----------------------------------------------------------------------------
-
-let g:qf_max_height = 25
-
-" -----------------------------------------------------------------------------
-" bfrg/vim-qf-preview settings - sets p as the preview keymapping
-" -----------------------------------------------------------------------------
-
-augroup qfpreview
-    autocmd!
-    autocmd FileType qf nmap <buffer> p <plug>(qf-preview-open)
-augroup END
-
-" -----------------------------------------------------------------------------
 " Yggdroot/indentLine settings
 " -----------------------------------------------------------------------------
 
@@ -821,12 +806,12 @@ let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_setColors = 1
 
 " -----------------------------------------------------------------------------
-" Quickfix list - removing as same as tpope/unimpaired
+" Quickfix list
 " -----------------------------------------------------------------------------
 
 " Navigate quickfix list with ease
-" nnoremap <silent> [q :cprevious<CR>
-" nnoremap <silent> ]q :cnext<CR>
+nnoremap <silent> [q :cprevious<CR>
+nnoremap <silent> ]q :cnext<CR>
 
 " -----------------------------------------------------------------------------
 " Autocomplete
