@@ -34,6 +34,15 @@ Plug 'itchyny/calendar.vim'
 " use ctrl-a to increment dates
 Plug 'tpope/vim-speeddating'
 
+" add more detail for pressing ga
+Plug 'tpope/vim-characterize'
+
+" adds new text objects and enhancements to default text object behaviour
+Plug 'wellle/targets.vim'
+
+" visualize marks in a column
+Plug 'kshenoy/vim-signature'
+
 " Navigate and manipulate files in a tree view.
 Plug 'lambdalisue/fern.vim'
 Plug 'lambdalisue/fern-mapping-mark-children.vim'
@@ -116,6 +125,12 @@ Plug 'preservim/vim-colors-pencil'
 " Git tool
 Plug 'tpope/vim-fugitive'
 
+" improves quickfix list behavior
+Plug 'romainl/vim-qf'
+
+" adds a preview for quickfix list
+Plug 'bfrg/vim-qf-preview'
+
 " Git commit browser tool to be used with fugitive
 Plug 'junegunn/gv.vim'
 
@@ -128,6 +143,7 @@ Plug 'Yggdroot/indentLine'
 " Languages and file types.
 Plug 'chrisbra/csv.vim'
 Plug 'othree/html5.vim'
+Plug 'othree/xml.vim'
 Plug 'tpope/vim-git'
 
 call plug#end()
@@ -218,6 +234,8 @@ set background=dark
 if (g:colors_name == 'gruvbox')
   if (&background == 'dark')
     hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#3a3a3a
+  " Titles for output from :set all, :autocmd, etc. - added by me
+   hi! link Title GruvboxRed
   else
     hi Visual cterm=NONE ctermfg=NONE ctermbg=228 guibg=#f2e5bc
     hi CursorLine cterm=NONE ctermfg=NONE ctermbg=228 guibg=#f2e5bc
@@ -779,6 +797,21 @@ augroup FernGroup
 augroup END
 
 " -----------------------------------------------------------------------------
+" romainl/vim-qf settings
+" -----------------------------------------------------------------------------
+
+let g:qf_max_height = 25
+
+" -----------------------------------------------------------------------------
+" bfrg/vim-qf-preview settings - sets p as the preview keymapping
+" -----------------------------------------------------------------------------
+
+augroup qfpreview
+    autocmd!
+    autocmd FileType qf nmap <buffer> p <plug>(qf-preview-open)
+augroup END
+
+" -----------------------------------------------------------------------------
 " Yggdroot/indentLine settings
 " -----------------------------------------------------------------------------
 
@@ -788,12 +821,12 @@ let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_setColors = 1
 
 " -----------------------------------------------------------------------------
-" Quickfix list
+" Quickfix list - removing as same as tpope/unimpaired
 " -----------------------------------------------------------------------------
 
 " Navigate quickfix list with ease
-nnoremap <silent> [q :cprevious<CR>
-nnoremap <silent> ]q :cnext<CR>
+" nnoremap <silent> [q :cprevious<CR>
+" nnoremap <silent> ]q :cnext<CR>
 
 " -----------------------------------------------------------------------------
 " Autocomplete
