@@ -203,7 +203,7 @@ set splitbelow
 set splitright
 set tabstop=2                  " width that a <TAB> character displays as
 set termguicolors
-set textwidth=2                " best to make this the same as the tabstop
+set textwidth=0                " best to make this the same as the tabstop
 set timeoutlen=150             " If less than 200, leader mappings don't work. Timeout after typing a mapping code before aborting it and carrying out the behaviour of the keys typed so far
 set ttimeoutlen=80             " Time Vim will wait after each keycode keystroke such as <esc> before aborting it and carrying out the behaviour of the keys typed so far
 set ttyfast
