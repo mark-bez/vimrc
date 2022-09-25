@@ -44,7 +44,7 @@ Plug 'wellle/targets.vim'
 Plug 'kshenoy/vim-signature'
 
 " Navigate and manipulate files in a tree view.
-Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/fern.vim', { 'branch': 'main' }
 Plug 'lambdalisue/fern-mapping-mark-children.vim'
 
 " Modify * to also work with visual selections.
@@ -119,8 +119,12 @@ Plug 'inkarkat/vim-ingo-library' | Plug 'inkarkat/vim-SpellCheck'
 Plug 'ap/vim-css-color'
 
 " colorschemes
-Plug 'gruvbox-community/gruvbox'
-Plug 'preservim/vim-colors-pencil'
+" Plug 'gruvbox-community/gruvbox'
+" Plug 'preservim/vim-colors-pencil'
+Plug 'ajmwagar/vim-deus'
+
+" Prose helper
+Plug 'preservim/vim-pencil'
 
 " Git tool
 Plug 'tpope/vim-fugitive'
@@ -204,8 +208,8 @@ set splitright
 set tabstop=2                  " width that a <TAB> character displays as
 set termguicolors
 set textwidth=0                " best to make this the same as the tabstop
-set timeoutlen=150             " If less than 200, leader mappings don't work. Timeout after typing a mapping code before aborting it and carrying out the behaviour of the keys typed so far
-set ttimeoutlen=80             " Time Vim will wait after each keycode keystroke such as <esc> before aborting it and carrying out the behaviour of the keys typed so far
+set timeoutlen=1000            " If less than 200, leader mappings don't work. Timeout after typing a mapping code before aborting it and carrying out the behaviour of the keys typed so far
+set ttimeoutlen=-1             " Time Vim will wait after each keycode keystroke such as <esc> before aborting it and carrying out the behaviour of the keys typed so far
 set ttyfast
 set updatetime=4000            " related to when a swapfile is written default is 4 s which can cause delays - swapfile currently off with set noswapfile
 " set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v] " statusline comes from airline settings
@@ -227,8 +231,9 @@ if !exists('g:gruvbox_contrast_light')
 endif
 
 " Set the color scheme.
-colorscheme gruvbox
 set background=dark
+" colorscheme gruvbox
+colorscheme deus
 
 " Specific colorscheme settings (must come after setting your colorscheme).
 if (g:colors_name == 'gruvbox')
@@ -301,6 +306,9 @@ let g:indentLine_char_list = ['|']
 let mapleader =" "
 let g:mapleader =" "
 
+" localleader is needed for todo.txt vim plugin
+let maplocalleader ="'"
+
 " turn off search highlighting with <CR> (carriage-return)
 nnoremap <CR> :nohlsearch<CR><CR>
 
@@ -346,6 +354,9 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 nnoremap <tab> %
 vnoremap <tab> %
 
+" fixes problem with default gx behavior
+" nmap gx :silent execute "!chrome " . shellescape("<cWORD>")<CR>
+
 " splits the line on a character in Normal mode when pressing s
 nnoremap <leader>s i<CR><ESC>
 
@@ -381,6 +392,28 @@ nnoremap <leader>sp :normal! mz[s1z=`z<CR>
 " Toggle visually showing whitespace characters listed in listchars
 nnoremap <F2> :set list!<CR>
 inoremap <F2> <C-o>:set list!<CR>
+
+" replace common punctuation
+iabbrev <buffer> -- –
+iabbrev <buffer> --- —
+iabbrev <buffer> << «
+iabbrev <buffer> >> »
+
+" -----------------------------------------------------------------------------
+" Quickfix settings via vim-qf
+" -----------------------------------------------------------------------------
+"
+" :let g:qf_auto_open_loclist = 1
+" :let g:qf_auto_open_quickfix = 1
+" :let g:qf_auto_resize = 1
+
+" These settings don't work for ALE location list so the following script does
+" the same thing.
+"
+au FileType qf call AdjustWindowHeight(3, 10)
+function! AdjustWindowHeight(minheight, maxheight)
+  exe max([min([line("$"), a:maxheight]),a:minheight]). "wincmd_"
+endfunction
 
 " -----------------------------------------------------------------------------
 " Spell checking
@@ -435,10 +468,12 @@ endfunction
 " Airline settings
 " -----------------------------------------------------------------------------
 "
-let g:airline_theme='dark'
+" let g:airline_theme='dark'
 let g:airline_powerline_fonts = 1
 let g:airline_detect_modified=1
 let g:airline#extensions#capslock#symbol = 'CAPS'
+let g:airline_section_x = '%{PencilMode()}'
+let g:airline_theme='deus'
 
 " -----------------------------------------------------------------------------
 " Insert date and time
@@ -451,6 +486,14 @@ let g:airline#extensions#capslock#symbol = 'CAPS'
 " Insert date in normal and insert modes:
 :nnoremap <F5> "=strftime("%Y-%m-%d")<CR>P
 :inoremap <F5> <C-R>=strftime("%Y-%m-%d")<CR>
+
+
+" -----------------------------------------------------------------------------
+" txt.todo plugin settings
+" -----------------------------------------------------------------------------
+
+let g:todo_load_python = 1
+
 
 " -----------------------------------------------------------------------------
 " Copy file paths
@@ -883,8 +926,8 @@ nnoremap <leader><Right> "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><C-o>/\
 " Define what a word is so a GUID will be a word
 " -----------------------------------------------------------------------------
 
-set iskeyword+=\-  " a word includes hyphens to include filenames and GUIDs
-set iskeyword+=\.  " a word includes periods to include filename extensions such as .xml
+" set iskeyword+=\-  " a word includes hyphens to include filenames and GUIDs
+" set iskeyword+=\.  " a word includes periods to include filename extensions such as .xml
 
 " -----------------------------------------------------------------------------
 " Create text object for a line, v-select with vil -  https://vi.stackexchange.com/questions/24861/selector-for-line-of-text
@@ -937,10 +980,11 @@ nnoremap <leader>cd :lcd %:h<CR>
 nnoremap <silent> <F4> :redir @a<CR>:g//<CR>:redir END<CR>:new<CR>:put! a<CR>
 
 " DITA snippets - replace with template files you read in
-noremap <leader>dt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id="task-1"><CR><taskbody><CR><title>Title</title><CR></taskbody><CR></task><ESC>
-noremap <leader>dnt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id="task-1"><CR><taskbody><CR><title>Title</title><CR></taskbody><CR><task id="task-2"><CR><taskbody><CR><title>Title</title><CR></taskbody><CR></task><CR></task><ESC>
-noremap <leader>dc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id="concept-1"><CR><conbody><CR><title>Title</title><CR></conbody><CR></concept><ESC>
-noremap <leader>dnc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id="concept-1"><CR><conbody><CR><title>Title</title><CR></conbody><CR><concept id="concept-2"><CR><conbody><CR><title>Title</title><CR></conbody><CR></concept><CR></concept><ESC>
+noremap <leader>dt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id=""><CR><title>Title</title><CR><taskbody><CR></taskbody><CR></task><ESC>
+noremap <leader>dnt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id=""><CR><title>Title</title><CR><taskbody><CR></taskbody><CR><task id=""><CR><title>Title</title><CR><taskbody><CR></taskbody><CR></task><CR></task><ESC>
+noremap <leader>dc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id=""><CR><title>Title</title><CR><conbody><CR></conbody><CR></concept><ESC>
+noremap <leader>dnc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id=""><CR><title>Title</title><CR><conbody><CR></conbody><CR><concept id=""><CR><title>Title</title><CR><conbody><CR></conbody><CR></concept><CR></concept><ESC>
+noremap <leader>dg a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd"><CR><topic id=""><CR><title>Title</title><CR><body><CR></body></topic>
 
 " HTML snippets
 noremap <leader>ht a<!DOCTYPE html><CR><html><CR><head><CR><title>Title</title><CR><link rel="stylesheet" href="style.css"><CR></head><CR><body><CR><h1>Heading1</h1><CR></body><CR></html><ESC>
@@ -977,12 +1021,12 @@ set guicursor=i:ver30-iCursor-blinkwait3000
 
 set sidescroll=1 " scrolls the window left/right to see text outside the window
 
-set guifont=Roboto_Mono:h14:W300
+"set guifont=Roboto_Mono:h16:W300
+set guifont=Iosevka_Curly:h16:W300
 
 " Add keyboard shortcuts
 imap <Tab> <C-N>
 imap <leader><Tab> <C-X><C-F>
-
 endif
 
 " -----------------------------------------------------------------------------
