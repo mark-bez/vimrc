@@ -8,12 +8,15 @@ call plug#begin('$HOME/vimfiles/plugged')
 " Enhance viewing the list of previous and current files
 Plug 'gpanders/vim-oldfiles'
 
+" Autosave current buffer
+Plug '907th/vim-auto-save'
+
 " automatic typo spelling correction
 Plug 'tpope/vim-abolish'
 Plug 'jdelkins/vim-correction'
 
 " Drastically improve insert mode performance in files with folds.
-Plug 'Konfekt/FastFold'
+" Plug 'Konfekt/FastFold'
 
 " prose linter
 Plug 'errata-ai/vale'
@@ -23,10 +26,13 @@ Plug 'lgalke/vim-compiler-vale'
 " Plug 'ntpeters/vim-better-whitespace'
 
 " A number of useful motions for the quickfix list, pasting and more.
-Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-unimpaired'
 
 " show registers when you type "
 Plug 'junegunn/vim-peekaboo'
+
+" shows results of a command in a split window
+Plug 'AndrewRadev/bufferize.vim'
 
 " displays a calendar
 Plug 'itchyny/calendar.vim'
@@ -39,6 +45,9 @@ Plug 'tpope/vim-characterize'
 
 " adds new text objects and enhancements to default text object behaviour
 Plug 'wellle/targets.vim'
+
+" Enhanced substitution visualization
+Plug 'markonm/traces.vim'
 
 " visualize marks in a column
 Plug 'kshenoy/vim-signature'
@@ -56,6 +65,9 @@ Plug 'mhinz/vim-grepper'
 " Run a diff on 2 directories.
 Plug 'will133/vim-dirdiff'
 
+" Close a buffer without closing its split
+Plug 'qpkorr/vim-bufkill'
+
 " Briefly highlight which text was yanked.
 Plug 'machakann/vim-highlightedyank'
 
@@ -65,8 +77,10 @@ Plug 'unblevable/quick-scope'
 " Use two keystrokes to jump to a location in the file
 Plug 'justinmk/vim-sneak'
 
+" status lines
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+" Plug 'bluz71/vim-mistfly-statusline'
 
 " Show git file changes in the gutter.
 Plug 'mhinz/vim-signify'
@@ -88,9 +102,6 @@ Plug 'tpope/vim-obsession'
 
 " Zoom in and out of a specific split pane (similar to tmux).
 Plug 'dhruvasagar/vim-zoom'
-
-" emmet
-Plug 'mattn/emmet-vim'
 
 " Integrate fzf with Vim.
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -119,17 +130,17 @@ Plug 'inkarkat/vim-ingo-library' | Plug 'inkarkat/vim-SpellCheck'
 Plug 'ap/vim-css-color'
 
 " colorschemes
-" Plug 'gruvbox-community/gruvbox'
-" Plug 'preservim/vim-colors-pencil'
+Plug 'gruvbox-community/gruvbox'
+Plug 'preservim/vim-colors-pencil'
 Plug 'ajmwagar/vim-deus'
 
-" Prose helper
+" prose helper
 Plug 'preservim/vim-pencil'
 
 " Git tool
 Plug 'tpope/vim-fugitive'
 
-" improves quickfix list behavior
+" improves quickfix list behavior in place of unimpaired
 Plug 'romainl/vim-qf'
 
 " adds a preview for quickfix list
@@ -159,7 +170,7 @@ call plug#end()
 set autoindent                 " copy indent from current line when starting a new line
 set autoread                   "autoreload the file if is has been changed outside Vim
 set backspace=indent,eol,start " Allows you to backspace to the left of the Insert mode entry character
-set cmdheight=2                " give more space for displaying messages
+set cmdheight=1                " give more space for displaying messages
 set complete+=.,w,b,u,i            " sets the completion mode for the built-in insert completion - see also set omnifunc=syntaxcomplete#Complete
 set cursorline                 " highlight current line - this may slow down performance
 set cpo-=J                     " sets the definition of a sentence to be one space after the period - for two spaces use set cpo+=J
@@ -201,7 +212,7 @@ set showmatch                  "turn off highlight matching parentheses / bracke
 set noshowmode                 " turn off statusline mode because airline has it built in
 set smartcase
 set smartindent                " even better autoindent (e.g. add indent after '{')
-set softtabstop=2       " backspace after pressing <TAB> will remove up to this many spaces
+set softtabstop=2              " backspace after pressing <TAB> will remove up to this many spaces
 set spelllang=en_us
 set splitbelow
 set splitright
@@ -231,9 +242,8 @@ if !exists('g:gruvbox_contrast_light')
 endif
 
 " Set the color scheme.
-set background=dark
-" colorscheme gruvbox
 colorscheme deus
+set background=dark
 
 " Specific colorscheme settings (must come after setting your colorscheme).
 if (g:colors_name == 'gruvbox')
@@ -306,7 +316,7 @@ let g:indentLine_char_list = ['|']
 let mapleader =" "
 let g:mapleader =" "
 
-" localleader is needed for todo.txt vim plugin
+" used by todo.txt
 let maplocalleader ="'"
 
 " turn off search highlighting with <CR> (carriage-return)
@@ -354,9 +364,6 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 nnoremap <tab> %
 vnoremap <tab> %
 
-" fixes problem with default gx behavior
-" nmap gx :silent execute "!chrome " . shellescape("<cWORD>")<CR>
-
 " splits the line on a character in Normal mode when pressing s
 nnoremap <leader>s i<CR><ESC>
 
@@ -393,27 +400,9 @@ nnoremap <leader>sp :normal! mz[s1z=`z<CR>
 nnoremap <F2> :set list!<CR>
 inoremap <F2> <C-o>:set list!<CR>
 
-" replace common punctuation
-iabbrev <buffer> -- –
-iabbrev <buffer> --- —
-iabbrev <buffer> << «
-iabbrev <buffer> >> »
-
-" -----------------------------------------------------------------------------
-" Quickfix settings via vim-qf
-" -----------------------------------------------------------------------------
-"
-" :let g:qf_auto_open_loclist = 1
-" :let g:qf_auto_open_quickfix = 1
-" :let g:qf_auto_resize = 1
-
-" These settings don't work for ALE location list so the following script does
-" the same thing.
-"
-au FileType qf call AdjustWindowHeight(3, 10)
-function! AdjustWindowHeight(minheight, maxheight)
-  exe max([min([line("$"), a:maxheight]),a:minheight]). "wincmd_"
-endfunction
+" Very nice shortcut for cycling through open buffers
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
 
 " -----------------------------------------------------------------------------
 " Spell checking
@@ -464,16 +453,59 @@ function SetVimPresentationMode()
   endif
 endfunction
 
+" automatically leave insert mode after 'updatetime' milliseconds of inaction
+au CursorHoldI * stopinsert
+
+" -----------------------------------------------------------------------------
+" vim-auto-save plugin settings
+" -----------------------------------------------------------------------------
+
+let g:auto_save = 1  " enable AutoSave on Vim startup
+
+"override autosave on start up except for particular filetypes
+let g:auto_save = 0
+augroup ft_markdown
+  au!
+  au FileType markdown let b:auto_save = 1
+  au FileType asciidoctor let b:auto_save = 1
+  au FileType asciidoc let b:auto_save = 1
+  au FileType text let b:auto_save = 1
+
+augroup END
+
 " -----------------------------------------------------------------------------
 " Airline settings
 " -----------------------------------------------------------------------------
 "
 " let g:airline_theme='dark'
 let g:airline_powerline_fonts = 1
-let g:airline_detect_modified=1
-let g:airline#extensions#capslock#symbol = 'CAPS'
-let g:airline_section_x = '%{PencilMode()}'
-let g:airline_theme='deus'
+let g:airline_detect_modified= 1
+" let g:airline#extensions#capslock#symbol = 'CAPS'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline_theme= 'deus'
+
+" -----------------------------------------------------------------------------
+" Adds enhanced capabilities when running Vim Diff in version 8+
+" -----------------------------------------------------------------------------
+
+if has("patch-8.1.0360")
+    set diffopt+=internal,algorithm:patience
+endif
+
+" -----------------------------------------------------------------------------
+" todo.txt settings
+" -----------------------------------------------------------------------------
+"
+" Auto complete projects
+au filetype todo imap <buffer> + +<C-X><C-O>
+
+" Auto complete contexts
+au filetype todo imap <buffer> @ @<C-X><C-O>
+
+let g:Todo_txt_first_level_sort_mode="i"
+let g:Todo_txt_second_level_sort_mode="i"
+let g:todo_load_python = 1
 
 " -----------------------------------------------------------------------------
 " Insert date and time
@@ -487,13 +519,21 @@ let g:airline_theme='deus'
 :nnoremap <F5> "=strftime("%Y-%m-%d")<CR>P
 :inoremap <F5> <C-R>=strftime("%Y-%m-%d")<CR>
 
-
 " -----------------------------------------------------------------------------
-" txt.todo plugin settings
+" Quickfix list settings via vim-qf
 " -----------------------------------------------------------------------------
+" set quickfix list height to the number of items in the list if less than 10
 
-let g:todo_load_python = 1
+let g:qf_auto_open_loclist = 1
+let g:qf_auto_open_quickfix = 1
+let g:qf_auto_resize = 1
 
+" autoresize doesn't work for the location list used by ALE, so here is a script to do the same thing from https://vim.fandom.com/wiki/Automatically_fitting_a_quickfix_window_height
+
+au FileType qf call AdjustWindowHeight(3, 10)
+function! AdjustWindowHeight(minheight, maxheight)
+  exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+endfunction
 
 " -----------------------------------------------------------------------------
 " Copy file paths
@@ -670,7 +710,7 @@ xmap <Leader>R
 let g:fastfold_savehook=0
 let g:fastfold_fold_command_suffixes=[]
 " let g:markdown_syntax_folding = 1
-let g:asciidoctor_syntax_folding = 1
+let g:asciidoctor_syntax_folding = 0
 " let g:html_syntax_folding = 1
 
 " .............................................................................
@@ -681,7 +721,7 @@ let g:asciidoctor_syntax_folding = 1
 let g:asciidoctor_folding = 1
 
 " Fold options, default `0`.
-let g:asciidoctor_fold_options = 2
+let g:asciidoctor_fold_options = 1
 
 " What to use for HTML, default `asciidoctor`.
 let g:asciidoctor_executable = 'asciidoctor'
@@ -929,6 +969,9 @@ nnoremap <leader><Right> "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><C-o>/\
 " set iskeyword+=\-  " a word includes hyphens to include filenames and GUIDs
 " set iskeyword+=\.  " a word includes periods to include filename extensions such as .xml
 
+set iskeyword-=\-  " a word DOES NOT include hyphens to include filenames and GUIDs
+set iskeyword-=\.  " a word DOES NOT include periods to include filename extensions such as .xml
+
 " -----------------------------------------------------------------------------
 " Create text object for a line, v-select with vil -  https://vi.stackexchange.com/questions/24861/selector-for-line-of-text
 " -----------------------------------------------------------------------------
@@ -980,11 +1023,11 @@ nnoremap <leader>cd :lcd %:h<CR>
 nnoremap <silent> <F4> :redir @a<CR>:g//<CR>:redir END<CR>:new<CR>:put! a<CR>
 
 " DITA snippets - replace with template files you read in
-noremap <leader>dt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id=""><CR><title>Title</title><CR><taskbody><CR></taskbody><CR></task><ESC>
-noremap <leader>dnt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id=""><CR><title>Title</title><CR><taskbody><CR></taskbody><CR><task id=""><CR><title>Title</title><CR><taskbody><CR></taskbody><CR></task><CR></task><ESC>
-noremap <leader>dc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id=""><CR><title>Title</title><CR><conbody><CR></conbody><CR></concept><ESC>
-noremap <leader>dnc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id=""><CR><title>Title</title><CR><conbody><CR></conbody><CR><concept id=""><CR><title>Title</title><CR><conbody><CR></conbody><CR></concept><CR></concept><ESC>
-noremap <leader>dg a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd"><CR><topic id=""><CR><title>Title</title><CR><body><CR></body></topic>
+noremap <leader>dt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id="task_"><CR><title>Title</title><CR><taskbody><CR></taskbody><CR></task><ESC>
+noremap <leader>dnt a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"><CR><task id="task_"><CR><title>Title</title><CR><taskbody><CR></taskbody><CR><task id="task-2"><CR><taskbody><CR><title>Title</title><CR></taskbody><CR></task><CR></task><ESC>
+noremap <leader>dc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id="concept_"><CR><title>Title</title><CR><conbody><CR></conbody><CR></concept><ESC>
+noremap <leader>dnc a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"><CR><concept id="concept_"><CR><title>Title</title><CR><conbody><CR></conbody><CR><concept id="concept-2"><CR><conbody><CR><title>Title</title><CR></conbody><CR></concept><CR></concept><ESC>
+noremap <leader>dg a<?xml version="1.0" encoding="utf-8"?><CR><!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd"><CR><topic id="topic_"><CR><CR><title>Title</title><body><CR></body><CR></topic><ESC>
 
 " HTML snippets
 noremap <leader>ht a<!DOCTYPE html><CR><html><CR><head><CR><title>Title</title><CR><link rel="stylesheet" href="style.css"><CR></head><CR><body><CR><h1>Heading1</h1><CR></body><CR></html><ESC>
@@ -1021,12 +1064,13 @@ set guicursor=i:ver30-iCursor-blinkwait3000
 
 set sidescroll=1 " scrolls the window left/right to see text outside the window
 
-"set guifont=Roboto_Mono:h16:W300
-set guifont=Iosevka_Curly:h16:W300
+" set guifont=Roboto_Mono:h11:W400
+set guifont=Iosevka_Fixed_Extended:h14:cANSI:qDRAFT
 
 " Add keyboard shortcuts
 imap <Tab> <C-N>
 imap <leader><Tab> <C-X><C-F>
+
 endif
 
 " -----------------------------------------------------------------------------
