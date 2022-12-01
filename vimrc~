@@ -206,7 +206,7 @@ set relativenumber             " set relative line numbers
 set ruler                      " show line and column number of the cursor on right side of statusline
 set scrolloff=0                " keep this number of lines between the cursor and the edge of the screen
 set shiftwidth=2               " number of spaces to use for each step of (auto)indent
-set shortmess=a                " turns off Bram's message on start-up and prevents Press Enter or type command to continue message on save when backupdir is being used
+set shortmess=a                " turns off Bram's message on start-up (I)
 set showcmd
 set sidescroll=1               " scrolls the window left/right to see text outside the window
 set showmatch                  "turn off highlight matching parentheses / brackets [{()}]
