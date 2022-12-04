@@ -5,6 +5,9 @@
 call plug#begin('$HOME/vimfiles/plugged')
 "call plug#begin('~/.vim/plugged')
 
+" Lookup online thesaurus with <localleader>k
+Plug 'beloglazov/vim-online-thesaurus'
+
 " Enhance viewing the list of previous and current files
 Plug 'gpanders/vim-oldfiles'
 
@@ -133,6 +136,7 @@ Plug 'ap/vim-css-color'
 Plug 'gruvbox-community/gruvbox'
 Plug 'preservim/vim-colors-pencil'
 Plug 'ajmwagar/vim-deus'
+Plug 'junegunn/seoul256.vim'
 
 " prose helper
 Plug 'preservim/vim-pencil'
@@ -259,6 +263,21 @@ if (g:colors_name == 'gruvbox')
   endif
 endif
 
+
+" seoul256 (dark):
+"   Range:   233 (darkest) ~ 239 (lightest)
+"   Default: 237
+let g:seoul256_background = 234
+colo seoul256
+
+" seoul256 (light):
+"   Range:   252 (darkest) ~ 256 (lightest)
+"   Default: 253
+" let g:seoul256_background = 256
+" colo seoul256
+
+
+
 " -----------------------------------------------------------------------------
 " Status line
 " -----------------------------------------------------------------------------
@@ -345,7 +364,7 @@ nnoremap <C-k> <C-w><C-k>
 nnoremap <C-j> <C-w><C-j>
 
 " keep cursor in the center when scrolling by screens
-nnoremap <C-d> <C-d>zz-1
+nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 nnoremap <C-f> <C-f>zz
 nnoremap <C-b> <C-b>zz

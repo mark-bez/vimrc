@@ -133,6 +133,7 @@ Plug 'ap/vim-css-color'
 Plug 'gruvbox-community/gruvbox'
 Plug 'preservim/vim-colors-pencil'
 Plug 'ajmwagar/vim-deus'
+Plug 'junegunn/seoul256.vim'
 
 " prose helper
 Plug 'preservim/vim-pencil'
@@ -258,6 +259,21 @@ if (g:colors_name == 'gruvbox')
     hi ColorColumn cterm=NONE ctermfg=NONE ctermbg=228 guibg=#f2e5bc
   endif
 endif
+
+
+" seoul256 (dark):
+"   Range:   233 (darkest) ~ 239 (lightest)
+"   Default: 237
+let g:seoul256_background = 234
+colo seoul256
+
+" seoul256 (light):
+"   Range:   252 (darkest) ~ 256 (lightest)
+"   Default: 253
+" let g:seoul256_background = 256
+" colo seoul256
+
+
 
 " -----------------------------------------------------------------------------
 " Status line
