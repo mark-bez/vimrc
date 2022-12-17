@@ -5,9 +5,6 @@
 call plug#begin('$HOME/vimfiles/plugged')
 "call plug#begin('~/.vim/plugged')
 
-" Lookup online thesaurus with <localleader>k
-Plug 'beloglazov/vim-online-thesaurus'
-
 " Enhance viewing the list of previous and current files
 Plug 'gpanders/vim-oldfiles'
 
@@ -175,7 +172,7 @@ set autoindent                 " copy indent from current line when starting a n
 set autoread                   "autoreload the file if is has been changed outside Vim
 set backspace=indent,eol,start " Allows you to backspace to the left of the Insert mode entry character
 set cmdheight=1                " give more space for displaying messages
-set complete+=.,w,b,u,i            " sets the completion mode for the built-in insert completion - see also set omnifunc=syntaxcomplete#Complete
+set complete+=.,w,b,u,i        " sets the completion mode for the built-in insert completion - see also set omnifunc=syntaxcomplete#Complete
 set cursorline                 " highlight current line - this may slow down performance
 set cpo-=J                     " sets the definition of a sentence to be one space after the period - for two spaces use set cpo+=J
 set encoding=utf-8             " set encoding to UTF-8 (default was "latin1")
@@ -185,6 +182,7 @@ set formatoptions=tcqrn1
 set hidden                     " It hides buffers instead of closing them. This means that you can have unwritten changes to a file and open a new file using :e, without being forced to write or undo your changes first.
 set history=10000
 set hlsearch                   " highlight search matches
+set ignorecase                 " when used with smartcase makes searches not case sensitive except when using an uppercase character
 set incsearch                  " search as characters are entered, which is incremental search
 set laststatus=2               " always show statusline (even with only single window)
 set lazyredraw                 " redraw screen only when we need to
@@ -204,7 +202,7 @@ set noswapfile
 set nowrap                     " do not wrap lines
 set numberwidth=6              " sets the gutter width
 set omnifunc=syntaxcomplete#Complete " not on by default but MUST be here for XML insert completion or it will be really slow
-set path=.                     " sets the default path used for :find and gf and others to the directory the current buffer is in only
+set path=$PWD/**               " sets the default path used for :find and gf and others to the directory the current buffer is in only
 set regexpengine=1
 set relativenumber             " set relative line numbers
 set ruler                      " show line and column number of the cursor on right side of statusline
@@ -241,7 +239,17 @@ runtime! macros/matchit.vim
 " Color settings
 " -----------------------------------------------------------------------------
 
-" Specific colorscheme settings (must come before setting your colorscheme).
+" seoul256 (dark):
+"   Range:   233 (darkest) ~ 239 (lightest)
+"   Default: 237
+let g:seoul256_background = 234
+
+" seoul256 (light):
+"   Range:   252 (darkest) ~ 256 (lightest)
+"   Default: 253
+" let g:seoul256_background = 256
+
+" Specific colorscheme settings (must come BEFORE setting your colorscheme).
 if !exists('g:gruvbox_contrast_light')
   let g:gruvbox_contrast_light='hard'
 endif
@@ -250,7 +258,7 @@ endif
 colorscheme deus
 set background=dark
 
-" Specific colorscheme settings (must come after setting your colorscheme).
+" Specific colorscheme settings (must come AFTER setting your colorscheme).
 if (g:colors_name == 'gruvbox')
   if (&background == 'dark')
     hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#3a3a3a
@@ -262,20 +270,6 @@ if (g:colors_name == 'gruvbox')
     hi ColorColumn cterm=NONE ctermfg=NONE ctermbg=228 guibg=#f2e5bc
   endif
 endif
-
-
-" seoul256 (dark):
-"   Range:   233 (darkest) ~ 239 (lightest)
-"   Default: 237
-let g:seoul256_background = 234
-colo seoul256
-
-" seoul256 (light):
-"   Range:   252 (darkest) ~ 256 (lightest)
-"   Default: 253
-" let g:seoul256_background = 256
-" colo seoul256
-
 
 
 " -----------------------------------------------------------------------------
@@ -336,7 +330,7 @@ let g:indentLine_char_list = ['|']
 let mapleader =" "
 let g:mapleader =" "
 
-" used by todo.txt
+" set the local map leader which is used by todo.txt
 let maplocalleader ="'"
 
 " turn off search highlighting with <CR> (carriage-return)
@@ -351,6 +345,14 @@ inoremap jk <esc>
 inoremap kj <esc>
 xnoremap jk <esc>
 xnoremap kj <esc>
+
+" add undo points at every punctuation mark when writing prose
+inoremap ! !<C-g>u
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap : :<C-g>u
+inoremap ; ;<C-g>u
+inoremap ? ?<C-g>u
 
 " map the ENTER key to switch back to Normal mode from Insert and Visual
 " Use Caps Lock ENTER (mapped to Ctrl) to add a line return from Insert mode
@@ -416,7 +418,7 @@ vmap y ygv<Esc>
 nnoremap <leader>v <C-w>v<C-w>l
 
 " Open a new empty tab
-nnoremap <leader>a :tabnew<CR>
+" nnoremap <leader>a :tabnew<CR>
 
 " Automatically fix the last misspelled word and jump back to where you were.
 "   Taken from this talk: https://www.youtube.com/watch?v=lwD8G1P52Sk
@@ -932,7 +934,7 @@ augroup END
 " -----------------------------------------------------------------------------
 
 " let g:indentLine_char = '|'
-let g:indentLine_first_char = ''
+" let g:indentLine_first_char = ''
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_setColors = 1
 
@@ -1063,9 +1065,9 @@ onoremap <silent> il :<C-U>execute "normal! ^v".v:count1."g_"<CR>
 " -----------------------------------------------------------------------------
 
 " This setting must be at toward the bottom for it to work.
-" It maps cd to change the working directory to the directory of active file
-" nnoremap <leader>cd :cd %:p:h<CR>
-nnoremap <leader>cd :lcd %:h<CR>
+" It maps cd to change the working directory to the directory of active file, cs means current session – all windows - and cw means current window only
+nnoremap <leader>cs :cd %:p:h<CR>
+nnoremap <leader>cw :lcd %:h<CR>
 
 " F4 following a :g/pattern result puts the result into a new window
 nnoremap <silent> <F4> :redir @a<CR>:g//<CR>:redir END<CR>:new<CR>:put! a<CR>
