@@ -330,8 +330,8 @@ let g:indentLine_char_list = ['|']
 let mapleader =" "
 let g:mapleader =" "
 
-" set the local map leader which is used by todo.txt
-let maplocalleader ="\"
+" set the local map leader which is used by todo.txt, note escaped backslash
+let maplocalleader ="\\"
 
 " turn off search highlighting with <CR> (carriage-return)
 nnoremap <CR> :nohlsearch<CR><CR>
