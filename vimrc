@@ -194,7 +194,7 @@ set number                     " show line numbers
 set mmp=5000
 set mouse=a                    " enable mouse support (might not work well on Mac OS X)
 set backup
-set backupdir=. 
+set backupdir=C:\Users\echo\Documents\vim-backup-files 
 set nocompatible               " This should be set by default in Vim8, but just in case
 set nocp
 set nostartofline
@@ -331,7 +331,7 @@ let mapleader =" "
 let g:mapleader =" "
 
 " set the local map leader which is used by todo.txt
-let maplocalleader ="'"
+let maplocalleader ="\"
 
 " turn off search highlighting with <CR> (carriage-return)
 nnoremap <CR> :nohlsearch<CR><CR>
