@@ -134,6 +134,7 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'preservim/vim-colors-pencil'
 Plug 'ajmwagar/vim-deus'
 Plug 'junegunn/seoul256.vim'
+Plug 'dterei/VimCobaltColourScheme'
 
 " prose helper
 Plug 'preservim/vim-pencil'
@@ -161,6 +162,12 @@ Plug 'chrisbra/csv.vim'
 Plug 'othree/html5.vim'
 Plug 'othree/xml.vim'
 Plug 'tpope/vim-git'
+
+" Displays a list of tags in source code
+Plug 'yegappan/taglist'
+" Plug 'universal-ctags/ctags'
+Plug 'xolox/vim-easytags' 
+Plug 'xolox/vim-misc' 
 
 call plug#end()
 
@@ -255,7 +262,7 @@ if !exists('g:gruvbox_contrast_light')
 endif
 
 " Set the color scheme.
-colorscheme deus
+colorscheme cobalt
 set background=dark
 
 " Specific colorscheme settings (must come AFTER setting your colorscheme).
@@ -953,6 +960,12 @@ nnoremap <silent> ]q :cnext<CR>
 inoremap ><Tab> ><Esc>F<lyt>o</<C-r>"><Esc>O<Space> 
 
 " -----------------------------------------------------------------------------
+" Exuberant CTags file location
+" -----------------------------------------------------------------------------
+
+:let g:easytags_file = '~/_vimtags'
+
+" -----------------------------------------------------------------------------
 " XML
 " -----------------------------------------------------------------------------
 
@@ -1093,10 +1106,10 @@ set guitablabel=%N\ %t\ %M  " Sets the syntax of the tab label to a tab number a
 
 highlight CursorLineNr gui=bold guifg=#ffffff guibg=#c0d0e0
 
-" Normal mode cursor - may be overridden by colorscheme
+" Normal mode cursor - may be overridden by colorscheme - see augroup tune_colors
 highlight nCursor guifg=white guibg=steelblue
 
-" Insert mode cursor - may be overridden by colorscheme
+" Insert mode cursor - may be overridden by colorscheme - see augroup tune_colors
 highlight iCursor guifg=white guibg=green
 
 " sets text color of folds, otherwise set by the colorscheme
@@ -1119,6 +1132,11 @@ set guifont=Iosevka_Fixed_Extended:h14:cANSI:qDRAFT
 " Add keyboard shortcuts
 imap <Tab> <C-N>
 imap <leader><Tab> <C-X><C-F>
+
+" augroup tune_colors | au!
+"   au ColorScheme * hi nCursor guibg=blue guifg=white
+"   au ColorScheme * hi iCursor guibg=red guifg=white
+" augroup END
 
 endif
 
